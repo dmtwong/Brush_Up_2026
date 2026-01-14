@@ -30,6 +30,26 @@ class Solution:
 	def sieve(self, A):
 """
 def sieve(A):
-    pass
-    
-    
+    ans = []
+    if A < 2:
+        return ans
+    # elif A == 2:
+    #     return [2]
+    else:
+        # ans.append(2)
+        for i in range(2, A + 1):
+            # ans.append(i)
+            isPrime = True
+            for j in range(2, int(i ** 0.5 ) + 1):
+                if i % j == 0:
+                    isPrime = False
+                    break
+                    # print(i, j)
+                    # ans.pop()
+            if isPrime == True:
+                ans.append(i)
+    return ans
+
+# for k in range(2, 12):
+#     print(sieve(k))
+
