@@ -68,3 +68,65 @@ def addNumbers(A, B):
 # B = 989233850
 # addNumbers_normal(A, B)
 # addNumbers(A, B)
+
+
+"""
+class Solution:
+    # @param A : integer
+    # @param B : integer
+    # @return an integer
+    def addNumbers(self, A, B):
+        while (B>0):
+            carry=A&B
+            A^=B
+            B=carry<<1
+        return A
+"""
+
+# Scala
+"""
+class Solution {
+    def addNumbers(A: Int, B: Int): Int  = {
+        if(B==0) A 
+        else{
+        val sumWOcarry = A ^ B
+        val carry = (A & B) << 1
+        addNumbers(sumWOcarry,carry)
+        }
+    }
+}
+
+"""
+
+# C++
+
+"""
+int Solution::addNumbers(int A, int B) {
+    while (B != 0) {
+        int carry = A & B;
+        A = A ^ B;
+        B = carry << 1;
+    }
+    return A;
+}
+"""
+
+# GO
+"""
+/**
+ * @input A : Integer
+ * @input B : Integer
+ * 
+ * @Output Integer
+ */
+func addNumbers(A int , B int )  (int) {
+    var C int
+    for B!=0 {
+        C = A&B;
+        A = A^B;
+        B = C << 1;
+    }
+    return A;
+}
+
+"""
