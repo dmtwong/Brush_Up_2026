@@ -117,5 +117,29 @@ func colorful(A int )  (int) {
         }
         return 1
 }
+/**
+ * @input A : Integer array
+ * @input B : Integer
+ * 
+ * @Output Integer
+ */
+func solve(A []int , B int )  (int) {
+    m := make(map[int]bool)
+    ans := 0
+    for _, a := range A {
+        if _, ok := m[B^a]; ok {
+            ans ++
+        }
+        m[a] = true
+    }
+    return ans
+}
+
+// 3 ^ 6 = 5
+// 3 ^ 5 = 
+
+// 011 ->
+// 110 ->
+// 101 ->
 
 '''
