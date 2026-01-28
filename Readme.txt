@@ -10,6 +10,5 @@ Day 9: 1 queue and 2 checkpoints
 Day 10: 4 backtrackings
 Day 11: 3 hashings
 Day 12: 2 hashings
-
-Day 13 & 14: 1 array, 1 math, and 5 binary tree structure
-
+Day 13 & 14: 5 binary tree structure
+Day 15: 2 checkpoints and 2 greedy algorithm
