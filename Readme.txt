@@ -12,3 +12,5 @@ Day 11: 3 hashings
 Day 12: 2 hashings
 Day 13 & 14: 5 binary tree structure
 Day 15: 2 checkpoints and 2 greedy algorithm
+Day 16: 4 dynamic programming (Length of Longest Subsequence unfinished, see editorial solution instead)
+
