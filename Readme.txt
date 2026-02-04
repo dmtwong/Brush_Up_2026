@@ -10,3 +10,4 @@ Day 9: 1 queue and 2 checkpoints
 Day 10: 4 backtrackings
 Day 11: 3 hashings
 Day 12: 2 hashings
+Day 13b: 1 array and 1 math
