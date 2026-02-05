@@ -24,6 +24,21 @@ Fruther more when checking city+state+country,
 6) 'Market' is not unique (few cases has 2 distint market EMEA +EU or EMEA + APAC)
 7) so as 'Region', mix of Central and EMEA
 In that case we can't seperate a table for location using city state country as PK or region + market 
+UPDATE (2026-02-05 10:37): 
+1) from same orderID there could be multi values for shipDate
+2) Using city + state could be PK for Country but not state, market and postal code; maybe an overkill to create a seperate table;
+Looking at table 'orders', some fields in current table have multi values for 1 orderID by observation
+these columns will be shift to table 'prod' (if prodID is unquie but it is not a good idead after looking 'prod') 
+OR table 'ship' (if prodID is not unquie):
+Discount, Profit, Quantity, Sales
+3) looking at prod table, there's one prodID has two subcategory. In real life may contact source owner to decide whether it deserve a new prodID or merging
+but for practice purpose I will simply drop the three rows, 
+4) for prodName in table 'prod' there are too many duplicates I will put it in table ship
+5) So far 
+- shift Discount, Profit, Quantity, Sales from orders to ship
+- shift prodName to ship
+let's look at table 'cust'
+6) distinct custName and Segment value for particular custID, simply make unqiue is good enough 
 */
 CREATE DATABASE Orders_raw;
 USE Orders_raw;
@@ -54,7 +69,7 @@ LINES TERMINATED BY '\n'
 IGNORE 1 LINES //
 DELIMITER ;
 
-SELECT count(*) from orders_raw.orders;
+SELECT count(*) from orders_raw.orders; -- 51290
 SELECT * FROM orders limit 5;
 SET GLOBAL local_infile = 0;
 
@@ -172,7 +187,7 @@ SELECT count(*) from cust;
 -- SELECT count(rowID) from ship;
 SELECT * from ship limit 3;
 SELECT count(distinct(rowID)) from ship;
-SELECT count(distinct(orderID)) from ship;
+SELECT count(distinct(orderID)) from ship; -- 25035
 -- DROP PROCEDURE countDistincy;
 /* 
 As rowID is unquie but orderID not (25035), let's consider rowID as PK and rename it to shipID
@@ -242,7 +257,44 @@ FROM globalsuperstore.ship
 GROUP BY City, State, Country
 HAVING COUNT(distinct(Region)) > 1)
 ORDER BY City, State, Country;
+
+SELECT * FROM ship limit 1;
+SELECT City, State, COUNT(distinct(Country)) -- , COUNT(distinct(Region)), COUNT(distinct(orderID))
+FROM globalsuperstore.ship 
+GROUP BY City, State
+ORDER BY COUNT(distinct(Country)) DESC; -- , COUNT(distinct(Region)), COUNT(distinct(orderID))
+
+SELECT City, State, COUNT(distinct(Market)) -- , COUNT(distinct(Region)), COUNT(distinct(orderID))
+FROM globalsuperstore.ship 
+GROUP BY City, State
+ORDER BY COUNT(distinct(Market)) DESC; -- , COUNT(distinct(Region)), COUNT(distinct(orderID))
+
+SELECT City, State, COUNT(distinct(postalCode)) -- , COUNT(distinct(Region)), COUNT(distinct(orderID))
+FROM globalsuperstore.ship 
+GROUP BY City, State
+ORDER BY COUNT(distinct(postalCode)) DESC; -- , COUNT(distinct(Region)), COUNT(distinct(orderID))
+
+SELECT orderID, count(*) from orders GROUP BY orderID HAVING count(*) > 1 limit 5;
+
+SELECT * FROM orders 
+WHERE orderID in ('IN-2013-77878', 'IN-2013-71249', 'IN-2013-42360', 'IN-2011-81826', 'CA-2012-124891')
+ORDER BY orderID;
+
+SELECT prodID, count(*) FROM prod GROUP BY prodID HAVING count(*) > 1 ORDER BY count(*) desc;
+SELECT * FROM prod where prodID = 'OFF-AR-10003651';
+
+SELECT prodID, count(Distinct(SubCategory)) FROM prod GROUP BY prodID HAVING count(Distinct(SubCategory)) > 1 ORDER BY count(*) desc;
+SELECT * FROM prod where prodID = 'OFF-AVE-10002102'; -- exceptional case; 1 for binder and 1 for folder label
+SELECT prodID, count(Distinct(prodName)) FROM prod GROUP BY prodID HAVING count(Distinct(prodName)) > 1 ORDER BY count(*) desc;
+SELECT * FROM prod where prodID in ('OFF-AR-10003651', 'OFF-AR-10003829', 'OFF-BI-10002799') order by prodID;
+
+SELECT * from cust limit 3;
+SELECT custID, count(distinct(custName)) FROM cust GROUP BY custID HAVING count(distinct(custName)) > 1; 
+SELECT custID, count(distinct(Segment)) FROM cust GROUP BY custID HAVING count(distinct(custName)) > 1; 
+
+
 /*
 ALTER TABLE globalsuperstore.ship 
 DROP COLUMN orderID;
 */
+
