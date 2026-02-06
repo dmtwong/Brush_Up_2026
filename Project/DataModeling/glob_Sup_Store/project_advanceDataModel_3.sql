@@ -15,6 +15,7 @@ for now let's do it in two seperate schema.
 SQL script that is generated from ER diagram (gss_ER.mwb) using forward engineering feature of mysql workbench (source): fromER.sql 
 SQL script to create star: gss_star_schema.sql
 ER diagram backward engineered from the star schema: gss_star_Backward.mwb
-
+2026-02-05 19:03:
+Create graphs and interactive dashboard (use of filter in map chart can apply to other two graphs) 
 */
 
